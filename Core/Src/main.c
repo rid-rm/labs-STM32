@@ -97,15 +97,19 @@ int main(void)
     /* USER CODE END WHILE */
 
     /* USER CODE BEGIN 3 */
-	  HAL_GPIO_TogglePin(GPIOB, GPIO_PIN_12);
-	  HAL_Delay(time_delay);
-	  HAL_GPIO_TogglePin(GPIOB, GPIO_PIN_12 | GPIO_PIN_13);
-	  HAL_Delay(time_delay);
-	  HAL_GPIO_TogglePin(GPIOB, GPIO_PIN_13 | GPIO_PIN_14);
-	  HAL_Delay(time_delay);
-	  HAL_GPIO_TogglePin(GPIOB, GPIO_PIN_14 | GPIO_PIN_15);
-	  HAL_Delay(time_delay);
-	  HAL_GPIO_TogglePin(GPIOB, GPIO_PIN_15);
+	  if (HAL_GPIO_ReadPin(GPIOC, GPIO_PIN_13) == GPIO_PIN_RESET){
+
+		  HAL_GPIO_TogglePin(GPIOB, GPIO_PIN_12);
+		  HAL_Delay(time_delay);
+		  HAL_GPIO_TogglePin(GPIOB, GPIO_PIN_12 | GPIO_PIN_13);
+		  HAL_Delay(time_delay);
+		  HAL_GPIO_TogglePin(GPIOB, GPIO_PIN_13 | GPIO_PIN_14);
+		  HAL_Delay(time_delay);
+		  HAL_GPIO_TogglePin(GPIOB, GPIO_PIN_14 | GPIO_PIN_15);
+		  HAL_Delay(time_delay);
+		  HAL_GPIO_TogglePin(GPIOB, GPIO_PIN_15);
+	  }
+
   }
   /* USER CODE END 3 */
 }
