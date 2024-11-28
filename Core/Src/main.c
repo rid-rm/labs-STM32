@@ -90,8 +90,9 @@ int main(void)
 
   /* USER CODE END 2 */
   uint16_t time_delay = 500;
-  uint8_t button_pressed = 0; // Флаг состояния кнопки
-  uint8_t mode = 0;           // Текущий режим: 0 — по часовой, 1 — против часовой
+
+  uint8_t button_pressed = 0;
+
   /* Infinite loop */
   /* USER CODE BEGIN WHILE */
   while (1)
@@ -103,15 +104,17 @@ int main(void)
 		  HAL_Delay(50); // Антидребезг
 	      if (HAL_GPIO_ReadPin(GPIOC, GPIO_PIN_13) == GPIO_PIN_RESET) { // Кнопка всё ещё нажата
 	    	  button_pressed = 1; // Устанавливаем флаг кнопки
-	          mode = !mode;       // Переключаем режим
+	    	  if (time_delay > 100) {
+	    		  time_delay -= 100;
+	    	  } else {
+	    		  time_delay = 500; // Максимальная частота
+	    	  }
 	      }
 	  } else if (HAL_GPIO_ReadPin(GPIOC, GPIO_PIN_13) == GPIO_PIN_SET) {
 		  button_pressed = 0; // Сбрасываем флаг, когда кнопку отпустили
 	  }
 
-	  // Выполняем переключение в зависимости от режима
-	  if (mode == 0) {
-		  HAL_GPIO_TogglePin(GPIOB, GPIO_PIN_12);
+	      HAL_GPIO_TogglePin(GPIOB, GPIO_PIN_12);
 		  HAL_Delay(time_delay);
 		  HAL_GPIO_TogglePin(GPIOB, GPIO_PIN_12 | GPIO_PIN_13);
 		  HAL_Delay(time_delay);
@@ -120,17 +123,6 @@ int main(void)
 		  HAL_GPIO_TogglePin(GPIOB, GPIO_PIN_14 | GPIO_PIN_15);
 		  HAL_Delay(time_delay);
 		  HAL_GPIO_TogglePin(GPIOB, GPIO_PIN_15);
-	  } else {
-		  HAL_GPIO_TogglePin(GPIOB, GPIO_PIN_15);
-		  HAL_Delay(time_delay);
-		  HAL_GPIO_TogglePin(GPIOB, GPIO_PIN_15 | GPIO_PIN_14);
-		  HAL_Delay(time_delay);
-		  HAL_GPIO_TogglePin(GPIOB, GPIO_PIN_14 | GPIO_PIN_13);
-		  HAL_Delay(time_delay);
-		  HAL_GPIO_TogglePin(GPIOB, GPIO_PIN_13 | GPIO_PIN_12);
-		  HAL_Delay(time_delay);
-		  HAL_GPIO_TogglePin(GPIOB, GPIO_PIN_12);
-	  }
 
   }
   /* USER CODE END 3 */
