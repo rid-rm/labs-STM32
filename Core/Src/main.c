@@ -67,17 +67,22 @@ int main(void)
   /* USER CODE BEGIN 1 */
 	uint32_t i;
 
-	RCC->AHB1ENR |= RCC_AHB1ENR_GPIOBEN;
+	RCC->AHB1ENR |= RCC_AHB1ENR_GPIOBEN | RCC_AHB1ENR_GPIOCEN;
 
 	GPIOB->MODER = 0x55000000;
 	GPIOB->OTYPER = 0;
 	GPIOB->OSPEEDR = 0;
+
+	GPIOC->MODER = 0x00000800;
+
 	while (1)
 	{
-		for (uint8_t pin = 12; pin <= 15; pin++){
-			GPIOB->ODR = (1 << pin);
-			for (i = 0; i < 100000; i++){}
-			GPIOB->ODR = 0;
+		if (!(GPIOC->IDR & (1 << 13))){
+			for (uint8_t pin = 12; pin <= 15; pin++){
+				GPIOB->ODR = (1 << pin);
+				for (i = 0; i < 100000; i++){}
+				GPIOB->ODR = 0;
+			}
 		}
 	}
   /* USER CODE END 1 */
