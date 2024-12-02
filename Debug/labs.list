@@ -27,25 +27,25 @@ Idx Name          Size      VMA       LMA       File off  Algn
                   ALLOC
  11 .ARM.attributes 00000030  00000000  00000000  00002004  2**0
                   CONTENTS, READONLY
- 12 .debug_info   000014da  00000000  00000000  00002034  2**0
+ 12 .debug_info   000014f1  00000000  00000000  00002034  2**0
                   CONTENTS, READONLY, DEBUGGING, OCTETS
- 13 .debug_abbrev 000005d6  00000000  00000000  0000350e  2**0
+ 13 .debug_abbrev 000005d7  00000000  00000000  00003525  2**0
                   CONTENTS, READONLY, DEBUGGING, OCTETS
- 14 .debug_aranges 000001d8  00000000  00000000  00003ae8  2**3
+ 14 .debug_aranges 000001d8  00000000  00000000  00003b00  2**3
                   CONTENTS, READONLY, DEBUGGING, OCTETS
- 15 .debug_rnglists 0000014b  00000000  00000000  00003cc0  2**0
+ 15 .debug_rnglists 0000014b  00000000  00000000  00003cd8  2**0
                   CONTENTS, READONLY, DEBUGGING, OCTETS
- 16 .debug_macro  00013c80  00000000  00000000  00003e0b  2**0
+ 16 .debug_macro  00013c80  00000000  00000000  00003e23  2**0
                   CONTENTS, READONLY, DEBUGGING, OCTETS
- 17 .debug_line   0000218f  00000000  00000000  00017a8b  2**0
+ 17 .debug_line   0000219a  00000000  00000000  00017aa3  2**0
                   CONTENTS, READONLY, DEBUGGING, OCTETS
- 18 .debug_str    0007ec69  00000000  00000000  00019c1a  2**0
+ 18 .debug_str    0007ec69  00000000  00000000  00019c3d  2**0
                   CONTENTS, READONLY, DEBUGGING, OCTETS
- 19 .comment      00000043  00000000  00000000  00098883  2**0
+ 19 .comment      00000043  00000000  00000000  000988a6  2**0
                   CONTENTS, READONLY
- 20 .debug_frame  0000058c  00000000  00000000  000988c8  2**2
+ 20 .debug_frame  0000058c  00000000  00000000  000988ec  2**2
                   CONTENTS, READONLY, DEBUGGING, OCTETS
- 21 .debug_line_str 00000048  00000000  00000000  00098e54  2**0
+ 21 .debug_line_str 00000048  00000000  00000000  00098e78  2**0
                   CONTENTS, READONLY, DEBUGGING, OCTETS
 
 Disassembly of section .text:
@@ -113,37 +113,38 @@ int main(void)
  80001fc:	609a      	str	r2, [r3, #8]
 	while (1)
 	{
-		GPIOB->ODR = 0xF000;
- 80001fe:	4b0f      	ldr	r3, [pc, #60]	@ (800023c <main+0x64>)
- 8000200:	f44f 4270 	mov.w	r2, #61440	@ 0xf000
- 8000204:	615a      	str	r2, [r3, #20]
-		for (i=0;i<500000;i++){}
- 8000206:	2300      	movs	r3, #0
- 8000208:	607b      	str	r3, [r7, #4]
- 800020a:	e002      	b.n	8000212 <main+0x3a>
- 800020c:	687b      	ldr	r3, [r7, #4]
- 800020e:	3301      	adds	r3, #1
+		for (uint8_t pin = 12; pin <= 15; pin++){
+ 80001fe:	230c      	movs	r3, #12
+ 8000200:	70fb      	strb	r3, [r7, #3]
+ 8000202:	e014      	b.n	800022e <main+0x56>
+			GPIOB->ODR = (1 << pin);
+ 8000204:	78fb      	ldrb	r3, [r7, #3]
+ 8000206:	2201      	movs	r2, #1
+ 8000208:	409a      	lsls	r2, r3
+ 800020a:	4b0c      	ldr	r3, [pc, #48]	@ (800023c <main+0x64>)
+ 800020c:	615a      	str	r2, [r3, #20]
+			for (i = 0; i < 500000; i++){}
+ 800020e:	2300      	movs	r3, #0
  8000210:	607b      	str	r3, [r7, #4]
- 8000212:	687b      	ldr	r3, [r7, #4]
- 8000214:	4a0a      	ldr	r2, [pc, #40]	@ (8000240 <main+0x68>)
- 8000216:	4293      	cmp	r3, r2
- 8000218:	d9f8      	bls.n	800020c <main+0x34>
-		GPIOB->ODR = 0x0000;
- 800021a:	4b08      	ldr	r3, [pc, #32]	@ (800023c <main+0x64>)
- 800021c:	2200      	movs	r2, #0
- 800021e:	615a      	str	r2, [r3, #20]
-		for (i=0;i<500000; i++) {}
- 8000220:	2300      	movs	r3, #0
- 8000222:	607b      	str	r3, [r7, #4]
- 8000224:	e002      	b.n	800022c <main+0x54>
- 8000226:	687b      	ldr	r3, [r7, #4]
- 8000228:	3301      	adds	r3, #1
- 800022a:	607b      	str	r3, [r7, #4]
- 800022c:	687b      	ldr	r3, [r7, #4]
- 800022e:	4a04      	ldr	r2, [pc, #16]	@ (8000240 <main+0x68>)
- 8000230:	4293      	cmp	r3, r2
- 8000232:	d9f8      	bls.n	8000226 <main+0x4e>
-		GPIOB->ODR = 0xF000;
+ 8000212:	e002      	b.n	800021a <main+0x42>
+ 8000214:	687b      	ldr	r3, [r7, #4]
+ 8000216:	3301      	adds	r3, #1
+ 8000218:	607b      	str	r3, [r7, #4]
+ 800021a:	687b      	ldr	r3, [r7, #4]
+ 800021c:	4a08      	ldr	r2, [pc, #32]	@ (8000240 <main+0x68>)
+ 800021e:	4293      	cmp	r3, r2
+ 8000220:	d9f8      	bls.n	8000214 <main+0x3c>
+			GPIOB->ODR = 0;
+ 8000222:	4b06      	ldr	r3, [pc, #24]	@ (800023c <main+0x64>)
+ 8000224:	2200      	movs	r2, #0
+ 8000226:	615a      	str	r2, [r3, #20]
+		for (uint8_t pin = 12; pin <= 15; pin++){
+ 8000228:	78fb      	ldrb	r3, [r7, #3]
+ 800022a:	3301      	adds	r3, #1
+ 800022c:	70fb      	strb	r3, [r7, #3]
+ 800022e:	78fb      	ldrb	r3, [r7, #3]
+ 8000230:	2b0f      	cmp	r3, #15
+ 8000232:	d9e7      	bls.n	8000204 <main+0x2c>
  8000234:	e7e3      	b.n	80001fe <main+0x26>
  8000236:	bf00      	nop
  8000238:	40023800 	.word	0x40023800

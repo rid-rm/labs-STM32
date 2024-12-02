@@ -74,10 +74,11 @@ int main(void)
 	GPIOB->OSPEEDR = 0;
 	while (1)
 	{
-		GPIOB->ODR = 0xF000;
-		for (i=0;i<500000;i++){}
-		GPIOB->ODR = 0x0000;
-		for (i=0;i<500000; i++) {}
+		for (uint8_t pin = 12; pin <= 15; pin++){
+			GPIOB->ODR = (1 << pin);
+			for (i = 0; i < 500000; i++){}
+			GPIOB->ODR = 0;
+		}
 	}
   /* USER CODE END 1 */
 
