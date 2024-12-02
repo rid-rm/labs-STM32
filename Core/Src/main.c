@@ -65,7 +65,20 @@ int main(void)
 {
 
   /* USER CODE BEGIN 1 */
+	uint32_t i;
 
+	RCC->AHB1ENR |= RCC_AHB1ENR_GPIOBEN;
+
+	GPIOB->MODER = 0x55000000;
+	GPIOB->OTYPER = 0;
+	GPIOB->OSPEEDR = 0;
+	while (1)
+	{
+		GPIOB->ODR = 0xF000;
+		for (i=0;i<500000;i++){}
+		GPIOB->ODR = 0x0000;
+		for (i=0;i<500000; i++) {}
+	}
   /* USER CODE END 1 */
 
   /* MCU Configuration--------------------------------------------------------*/
@@ -92,12 +105,7 @@ int main(void)
 
   /* Infinite loop */
   /* USER CODE BEGIN WHILE */
-  while (1)
-  {
-    /* USER CODE END WHILE */
 
-    /* USER CODE BEGIN 3 */
-  }
   /* USER CODE END 3 */
 }
 
