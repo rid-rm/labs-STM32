@@ -76,7 +76,7 @@ int main(void)
 	{
 		for (uint8_t pin = 12; pin <= 15; pin++){
 			GPIOB->ODR = (1 << pin);
-			for (i = 0; i < 500000; i++){}
+			for (i = 0; i < 100000; i++){}
 			GPIOB->ODR = 0;
 		}
 	}
