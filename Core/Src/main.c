@@ -52,6 +52,7 @@ static void MX_GPIO_Init(void);
 static void MX_TIM1_Init(void);
 /* USER CODE BEGIN PFP */
 volatile bool state = true;
+volatile uint8_t click_count = 0;
 /* USER CODE END PFP */
 
 /* Private user code ---------------------------------------------------------*/
@@ -250,7 +251,26 @@ void HAL_GPIO_EXTI_Callback(uint16_t GPIO_Pin){
 void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim){
 	UNUSED(htim);
 	if(HAL_GPIO_ReadPin(Push_Button_GPIO_Port, Push_Button_Pin) == GPIO_PIN_RESET){
-		HAL_GPIO_TogglePin(GPIOB, GPIO_PIN_12);
+
+		click_count++;
+		switch (click_count % 4) {
+			case 0:
+				 HAL_GPIO_WritePin(GPIOB, GPIO_PIN_12, GPIO_PIN_SET);
+		         HAL_GPIO_WritePin(GPIOB, GPIO_PIN_13 | GPIO_PIN_14 | GPIO_PIN_15, GPIO_PIN_RESET);
+		         break;
+		    case 1:
+		         HAL_GPIO_WritePin(GPIOB, GPIO_PIN_13, GPIO_PIN_SET);
+		         HAL_GPIO_WritePin(GPIOB, GPIO_PIN_12 | GPIO_PIN_14 | GPIO_PIN_15, GPIO_PIN_RESET);
+		         break;
+		    case 2:
+		         HAL_GPIO_WritePin(GPIOB, GPIO_PIN_14, GPIO_PIN_SET);
+		         HAL_GPIO_WritePin(GPIOB, GPIO_PIN_12 | GPIO_PIN_13 | GPIO_PIN_15, GPIO_PIN_RESET);
+		         break;
+		    case 3:
+		         HAL_GPIO_WritePin(GPIOB, GPIO_PIN_15, GPIO_PIN_SET);
+		         HAL_GPIO_WritePin(GPIOB, GPIO_PIN_12 | GPIO_PIN_13 | GPIO_PIN_14, GPIO_PIN_RESET);
+		         break;
+		}
 		state = true;
 		HAL_TIM_Base_Stop_IT(&htim1);
 	}
